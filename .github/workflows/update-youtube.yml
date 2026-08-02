@@ -1,12 +1,7 @@
 name: Actualizar vídeos de YouTube
 
 on:
-  # Permite ejecutarlo manualmente desde GitHub.
   workflow_dispatch:
-
-  # Se ejecuta cada seis horas.
-  schedule:
-    - cron: "17 */6 * * *"
 
 permissions:
   contents: write
@@ -18,19 +13,29 @@ jobs:
 
     steps:
       - name: Descargar repositorio
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
-      - name: Preparar Python
-        uses: actions/setup-python@v5
+      - name: Configurar Python
+        uses: actions/setup-python@v6
         with:
           python-version: "3.12"
 
-      - name: Consultar YouTube
+      - name: Consultar YouTube Data API
         env:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
         run: python scripts/update_youtube.py
 
-      - name: Guardar cambios
+      - name: Comprobar archivo generado
+        run: |
+          if [ ! -f data/youtube-videos.json ]; then
+            echo "ERROR: no se ha generado data/youtube-videos.json"
+            exit 1
+          fi
+
+          python -m json.tool data/youtube-videos.json > /dev/null
+          echo "El archivo JSON se ha generado correctamente."
+
+      - name: Guardar cambios en el repositorio
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
