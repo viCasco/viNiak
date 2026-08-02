@@ -1,0 +1,45 @@
+name: Actualizar vídeos de YouTube
+
+on:
+  # Permite ejecutarlo manualmente desde GitHub.
+  workflow_dispatch:
+
+  # Se ejecuta cada seis horas.
+  schedule:
+    - cron: "17 */6 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  update-youtube:
+    name: Leer vídeos publicados
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Consultar YouTube
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: python scripts/update_youtube.py
+
+      - name: Guardar cambios
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add data/youtube-videos.json
+
+          if git diff --cached --quiet; then
+            echo "No hay vídeos nuevos ni cambios que guardar."
+          else
+            git commit -m "Actualiza vídeos publicados en YouTube"
+            git push
+          fi
