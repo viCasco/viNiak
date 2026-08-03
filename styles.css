@@ -28,7 +28,7 @@ h1 { font-size: clamp(3.5rem, 7vw, 7.6rem); line-height: .91; letter-spacing: -.
 h1 em { color: #9f9992; font-style: normal; }
 .hero-text { max-width: 720px; color: var(--muted); line-height: 1.8; font-size: 1.06rem; }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 35px; }
-.button { display: inline-flex; justify-content: center; align-items: center; min-height: 50px; padding: 0 23px; border-radius: 999px; font-size: .78rem; text-transform: uppercase; letter-spacing: .12em; transition: .25s ease; }
+.button { display: inline-flex; justify-content: center; align-items: center; min-height: 50px; padding: 0 23px; border-radius: 999px; font-size: .78rem; text-transform: uppercase; letter-spacing: .12em; transition: .25s ease; margin: 0 16px;}
 .button.primary { background: var(--text); color: #080808; }
 .button.primary:hover { transform: translateY(-3px); box-shadow: 0 14px 40px rgba(255,255,255,.15); }
 .button.ghost { border: 1px solid var(--line); }
